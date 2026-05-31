@@ -1,0 +1,104 @@
+{
+  "extensionName": {
+    "message": " final destination 檢查網址的最終目的地 333"
+  },
+  "extensionDescription": {
+    "message": "透過 888desturl API 檢查網址的最終目的地。"
+  },
+  "defaultTitle": {
+    "message": "final destination 333"
+  },
+  "contextMenuTitle": {
+    "message": "檢查最終網址"
+  },
+  "heroTitle": {
+    "message": "最終網址檢查"
+  },
+  "heroCopy": {
+    "message": "在頁面或連結上按右鍵，將結果即時傳送至側邊欄，流暢不干擾當前瀏覽。"
+  },
+  "statusIdleLabel": {
+    "message": "等待操作"
+  },
+  "statusIdleDetail": {
+    "message": "請在連結、選取文字或網頁空白處點擊右鍵，選擇「檢查最終網址」。"
+  },
+  "statusLoadingLabel": {
+    "message": "正在解析跳轉..."
+  },
+  "statusLoadingDetail": {
+    "message": "888desturl API 正在追蹤最終目的地。"
+  },
+  "statusLoadingSlowLabel": {
+    "message": "此連結跳轉較複雜，仍在追蹤中"
+  },
+  "statusLoadingSlowDetail": {
+    "message": "API 還在解析最終目的地，請稍候。"
+  },
+  "statusSuccessLabel": {
+    "message": "已取得最終網址"
+  },
+  "statusSuccessDetail": {
+    "message": "結果已準備完成，你可以直接複製或開啟追蹤頁。"
+  },
+  "statusErrorLabel": {
+    "message": "無法完成檢查"
+  },
+  "statusErrorDetailDefault": {
+    "message": "請稍後再試。"
+  },
+  "finalUrlLabel": {
+    "message": "最終目的地"
+  },
+  "copyButtonText": {
+    "message": "複製網址"
+  },
+  "copyButtonCopied": {
+    "message": "已複製"
+  },
+  "openButtonText": {
+    "message": "開啟結果頁"
+  },
+  "sourceLabel": {
+    "message": "來源"
+  },
+  "redirectCountLabel": {
+    "message": "跳轉次數"
+  },
+  "originalUrlLabel": {
+    "message": "原始網址"
+  },
+  "noResultsYet": {
+    "message": "尚未取得結果"
+  },
+  "waitingForInput": {
+    "message": "尚未收到輸入"
+  },
+  "notTriggered": {
+    "message": "尚未觸發"
+  },
+  "sourceLink": {
+    "message": "連結"
+  },
+  "sourcePage": {
+    "message": "目前頁面"
+  },
+  "sourceSelection": {
+    "message": "選取文字"
+  },
+  "errNoTab": {
+    "message": "找不到目前分頁，無法開啟側邊欄。"
+  },
+  "errSidePanelOpen": {
+    "message": "無法開啟 Chrome side panel。"
+  },
+  "errInvalidUrl": {
+    "message": "右鍵內容不是完整的 http:// 或 https:// 網址。"
+  },
+  "errTimeout": {
+    "message": "等待 API 回應逾時，請稍後再試。"
+  },
+  "errFetchFailed": {
+    "message": "無法取得最終網址。"
+  }
+}

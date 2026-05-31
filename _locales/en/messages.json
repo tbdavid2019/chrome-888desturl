@@ -1,0 +1,104 @@
+{
+  "extensionName": {
+    "message": " final destination 333"
+  },
+  "extensionDescription": {
+    "message": "Trace a link to its final destination with the 888desturl API."
+  },
+  "defaultTitle": {
+    "message": "final destination 333"
+  },
+  "contextMenuTitle": {
+    "message": "Check final destination"
+  },
+  "heroTitle": {
+    "message": "Final Destination Check"
+  },
+  "heroCopy": {
+    "message": "Right-click on a page or link to trace the destination in the side panel without interrupting your browsing."
+  },
+  "statusIdleLabel": {
+    "message": "Waiting for action"
+  },
+  "statusIdleDetail": {
+    "message": "Right-click a link, selected text, or anywhere on the page and select 'Check final destination'."
+  },
+  "statusLoadingLabel": {
+    "message": "Tracing redirects..."
+  },
+  "statusLoadingDetail": {
+    "message": "888desturl API is tracing the final destination."
+  },
+  "statusLoadingSlowLabel": {
+    "message": "Complex redirects, still tracing..."
+  },
+  "statusLoadingSlowDetail": {
+    "message": "API is still resolving the destination, please wait."
+  },
+  "statusSuccessLabel": {
+    "message": "Final destination resolved"
+  },
+  "statusSuccessDetail": {
+    "message": "The result is ready. You can copy the URL or open the trace page."
+  },
+  "statusErrorLabel": {
+    "message": "Check failed"
+  },
+  "statusErrorDetailDefault": {
+    "message": "Please try again later."
+  },
+  "finalUrlLabel": {
+    "message": "Final Destination"
+  },
+  "copyButtonText": {
+    "message": "Copy URL"
+  },
+  "copyButtonCopied": {
+    "message": "Copied"
+  },
+  "openButtonText": {
+    "message": "Open Results"
+  },
+  "sourceLabel": {
+    "message": "Source"
+  },
+  "redirectCountLabel": {
+    "message": "Redirects"
+  },
+  "originalUrlLabel": {
+    "message": "Original URL"
+  },
+  "noResultsYet": {
+    "message": "No results yet"
+  },
+  "waitingForInput": {
+    "message": "Waiting for input"
+  },
+  "notTriggered": {
+    "message": "Not triggered"
+  },
+  "sourceLink": {
+    "message": "Link"
+  },
+  "sourcePage": {
+    "message": "Current Page"
+  },
+  "sourceSelection": {
+    "message": "Selection"
+  },
+  "errNoTab": {
+    "message": "Cannot find active tab to open side panel."
+  },
+  "errSidePanelOpen": {
+    "message": "Failed to open Chrome side panel."
+  },
+  "errInvalidUrl": {
+    "message": "The right-clicked item is not a valid HTTP/HTTPS URL."
+  },
+  "errTimeout": {
+    "message": "Request timed out. Please try again later."
+  },
+  "errFetchFailed": {
+    "message": "Failed to resolve the final destination."
+  }
+}

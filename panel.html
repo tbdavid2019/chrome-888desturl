@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title data-i18n="defaultTitle">final destination 333</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="panel.css">
+  </head>
+  <body>
+    <main class="panel-shell">
+      <header class="hero">
+        <div class="brand-row">
+          <div class="brand-icon-wrapper">
+            <img class="brand-icon" src="icons/icon.svg" alt="logo">
+          </div>
+          <p class="eyebrow" data-i18n="defaultTitle">final destination 333</p>
+        </div>
+        <h1 data-i18n="heroTitle">最終網址檢查</h1>
+        <p class="hero-copy" data-i18n="heroCopy">在頁面或連結上按右鍵，將結果即時傳送至側邊欄，流暢不干擾當前瀏覽。</p>
+      </header>
+
+      <section class="card status-card">
+        <div class="status-row">
+          <div id="status-icon" class="status-icon idle" aria-hidden="true">
+            <!-- Idle Icon -->
+            <svg class="status-svg icon-idle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <circle cx="12" cy="12" r="9" stroke-dasharray="4 3" />
+              <path d="M12 8v4l3 3" stroke-linecap="round" />
+            </svg>
+            <!-- Loading Icon -->
+            <svg class="status-svg icon-loading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-opacity="0.15" />
+              <path d="M12 3c4.97 0 9 4.03 9 9" stroke-linecap="round" />
+            </svg>
+            <!-- Success Icon -->
+            <svg class="status-svg icon-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="12" cy="12" r="9" fill="rgba(16, 185, 129, 0.08)" />
+              <path d="M8 12.5l2.5 2.5 6-6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <!-- Error Icon -->
+            <svg class="status-svg icon-error" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="12" cy="12" r="9" fill="rgba(244, 63, 94, 0.08)" />
+              <path d="M12 8v5M12 16h.01" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <div class="status-text">
+            <p id="status-label" class="status-label" data-i18n="statusIdleLabel">等待操作</p>
+            <p id="status-detail" class="status-detail" data-i18n="statusIdleDetail">請在連結、選取文字或網頁空白處點擊右鍵，選擇「檢查最終網址」。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card data-card">
+        <p class="section-label" data-i18n="finalUrlLabel">最終目的地</p>
+        <p id="final-url" class="final-url muted" data-i18n="noResultsYet">尚未取得結果</p>
+        <div class="actions">
+          <button id="copy-button" class="button" type="button" disabled>
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <span data-i18n="copyButtonText">複製網址</span>
+          </button>
+          <a id="open-button" class="button button-secondary disabled-link" href="#" target="_blank" rel="noreferrer">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            <span data-i18n="openButtonText">開啟結果頁</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="grid">
+        <article class="card mini-card">
+          <p class="section-label" data-i18n="sourceLabel">來源</p>
+          <p id="source-label" class="mini-value muted" data-i18n="notTriggered">尚未觸發</p>
+        </article>
+        <article class="card mini-card">
+          <p class="section-label" data-i18n="redirectCountLabel">跳轉次數</p>
+          <p id="redirect-count" class="mini-value muted">-</p>
+        </article>
+      </section>
+
+      <section class="card target-card">
+        <p class="section-label" data-i18n="originalUrlLabel">原始網址</p>
+        <p id="target-url" class="target-url muted" data-i18n="waitingForInput">尚未收到輸入</p>
+      </section>
+    </main>
+
+    <script src="panel.js"></script>
+  </body>
+</html>
