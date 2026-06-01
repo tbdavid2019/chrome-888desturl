@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.2.0 - 2026-06-01
+
+### Added
+
+- Result preview card for final screenshot images
+- Web-risk card for security status, provider, and check timestamp
+- Support for `result_id`, `preview_url`, and `security` fields returned by `/api/final`
+- Optional fallback image loading through `GET /api/results/:resultId/final-image`
+- Optional fallback lookup for `GET /api/results/:resultId/web-risk`
+
+### Changed
+
+- Extended session state so the side panel can render result metadata beyond the final URL
+- Bumped extension manifest version to `0.2.0`
+
+### Notes
+
+- Tested on `2026-06-01`: `GET /api/final?url=https://example.com&format=json` returned `result_id`, `preview_url`, and `security`.
+- Tested on `2026-06-01`: `GET /api/results/:resultId/final-image` and `GET /api/results/:resultId/web-risk` returned `404 Not Found` for the sampled result on both `url.create360.ai` and `url.david888.com`.
+- Because of that behavior, the extension now prefers metadata already bundled in `/api/final` and only treats the result-specific endpoints as optional.
+
 ## 0.1.0 - 2026-05-30
 
 Initial working version of `888desturl Quick Trace`.

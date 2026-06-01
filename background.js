@@ -119,12 +119,106 @@ function normalizeResultUrl(value, activeBase) {
   return `${activeBase}${value}`;
 }
 
+function normalizeSecurityData(value) {
+  const candidate =
+    value && typeof value === "object" && value.security && typeof value.security === "object"
+      ? value.security
+      : value;
+
+  if (!candidate || typeof candidate !== "object") {
+    return null;
+  }
+
+  const status = typeof candidate.status === "string" ? candidate.status : null;
+  const source = typeof candidate.source === "string" ? candidate.source : null;
+  const checkedUrl =
+    typeof candidate.checked_url === "string" ? candidate.checked_url : null;
+  const checkedAt =
+    typeof candidate.checked_at === "string" ? candidate.checked_at : null;
+  const message = typeof candidate.message === "string" ? candidate.message : null;
+
+  if (!status && !source && !checkedUrl && !checkedAt && !message) {
+    return null;
+  }
+
+  return {
+    status,
+    source,
+    checkedUrl,
+    checkedAt,
+    message
+  };
+}
+
+async function fetchJsonWithFallback(path, controller, options = {}) {
+  const { optional = false } = options;
+  const attempts = [
+    { baseUrl: PRIMARY_BASE, label: "主伺服器" },
+    { baseUrl: FALLBACK_BASE, label: "備用伺服器" }
+  ];
+  let lastError = null;
+
+  for (const attempt of attempts) {
+    try {
+      const response = await fetch(`${attempt.baseUrl}${path}`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json"
+        },
+        signal: controller.signal
+      });
+
+      if (!response.ok) {
+        const error = new Error(`${attempt.label}回傳 ${response.status}`);
+        error.status = response.status;
+        throw error;
+      }
+
+      return {
+        data: await response.json(),
+        activeBase: attempt.baseUrl
+      };
+    } catch (error) {
+      if (error?.name === "AbortError") {
+        throw error;
+      }
+
+      lastError = error;
+
+      if (attempt.baseUrl === PRIMARY_BASE) {
+        console.warn(`${attempt.label}連線失敗，嘗試備用伺服器:`, error);
+        continue;
+      }
+
+      if (optional) {
+        console.warn(`補充資料取得失敗 (${path}):`, error);
+        return {
+          data: null,
+          activeBase: null
+        };
+      }
+    }
+  }
+
+  if (optional) {
+    return {
+      data: null,
+      activeBase: null
+    };
+  }
+
+  throw lastError || new Error(chrome.i18n.getMessage("errFetchFailed"));
+}
+
 async function setTraceState(patch) {
   const current = await chrome.storage.session.get(TRACE_STATE_KEY);
   const nextState = {
     finalUrl: null,
     redirectCount: null,
     resultUrl: null,
+    resultId: null,
+    finalImageUrl: null,
+    webRisk: null,
     targetUrl: null,
     source: null,
     message: null,
@@ -156,7 +250,7 @@ async function handleTraceRequest(target) {
 
   const targetUrl = target.url;
   const path = `/api/final?url=${encodeURIComponent(targetUrl)}&format=json`;
-  
+
   const controller = new AbortController();
   const abortTimer = setTimeout(() => controller.abort(), ABORT_MS);
   const slowTimer = setTimeout(() => {
@@ -172,6 +266,9 @@ async function handleTraceRequest(target) {
     finalUrl: null,
     redirectCount: null,
     resultUrl: null,
+    resultId: null,
+    finalImageUrl: null,
+    webRisk: null,
     message: null,
     targetUrl,
     source: target.source,
@@ -180,46 +277,23 @@ async function handleTraceRequest(target) {
   });
 
   try {
-    let response;
-    let activeBase = PRIMARY_BASE;
+    const { data, activeBase } = await fetchJsonWithFallback(path, controller);
+    const resultId = typeof data.result_id === "string" ? data.result_id : null;
+    let finalImageUrl = normalizeResultUrl(data.preview_url, activeBase);
+    let webRisk = normalizeSecurityData(data.security);
 
-    // Try primary base URL first
-    try {
-      response = await fetch(`${PRIMARY_BASE}${path}`, {
-        method: "GET",
-        headers: {
-          Accept: "application/json"
-        },
-        signal: controller.signal
-      });
-
-      if (!response.ok) {
-        throw new Error(`主伺服器回傳 ${response.status}`);
-      }
-    } catch (primaryError) {
-      // If the request was explicitly aborted (timeout), rethrow to trigger outer catch
-      if (primaryError?.name === "AbortError") {
-        throw primaryError;
-      }
-
-      console.warn("主伺服器連線失敗，嘗試備用伺服器:", primaryError);
-
-      // Fallback to backup base URL
-      activeBase = FALLBACK_BASE;
-      response = await fetch(`${FALLBACK_BASE}${path}`, {
-        method: "GET",
-        headers: {
-          Accept: "application/json"
-        },
-        signal: controller.signal
-      });
-
-      if (!response.ok) {
-        throw new Error(`備用伺服器回傳 ${response.status}`);
-      }
+    if (resultId && !finalImageUrl) {
+      finalImageUrl = `${activeBase}/api/results/${encodeURIComponent(resultId)}/final-image`;
     }
 
-    const data = await response.json();
+    if (resultId && !webRisk) {
+      const webRiskPath = `/api/results/${encodeURIComponent(resultId)}/web-risk`;
+      const { data: webRiskData } = await fetchJsonWithFallback(webRiskPath, controller, {
+        optional: true
+      });
+      webRisk = normalizeSecurityData(webRiskData);
+    }
+
     await setTraceState({
       phase: "success",
       targetUrl,
@@ -227,6 +301,9 @@ async function handleTraceRequest(target) {
       finalUrl: data.final_url ?? null,
       redirectCount: data.redirect_count ?? null,
       resultUrl: normalizeResultUrl(data.result_url, activeBase),
+      resultId,
+      finalImageUrl,
+      webRisk,
       message: null,
       step: null,
       detail: null,
@@ -243,6 +320,9 @@ async function handleTraceRequest(target) {
       finalUrl: null,
       redirectCount: null,
       resultUrl: null,
+      resultId: null,
+      finalImageUrl: null,
+      webRisk: null,
       targetUrl,
       source: target.source,
       message

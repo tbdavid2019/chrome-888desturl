@@ -59,11 +59,59 @@
   "openButtonText": {
     "message": "開啟結果頁"
   },
+  "finalImageLabel": {
+    "message": "最終畫面"
+  },
+  "openImageButtonText": {
+    "message": "開啟圖片"
+  },
+  "finalImageUnavailable": {
+    "message": "目前沒有可用預覽"
+  },
+  "finalImageLoading": {
+    "message": "正在載入最終畫面預覽..."
+  },
+  "finalImageLoadFailed": {
+    "message": "無法載入最終畫面預覽。"
+  },
   "sourceLabel": {
     "message": "來源"
   },
   "redirectCountLabel": {
     "message": "跳轉次數"
+  },
+  "webRiskLabel": {
+    "message": "網站風險"
+  },
+  "webRiskWaiting": {
+    "message": "等待結果後顯示網站安全檢查。"
+  },
+  "webRiskLoading": {
+    "message": "正在查詢網站安全狀態..."
+  },
+  "webRiskUnavailable": {
+    "message": "這次結果沒有可用的網站風險資料。"
+  },
+  "webRiskUnknown": {
+    "message": "尚未檢查"
+  },
+  "webRiskSafe": {
+    "message": "安全"
+  },
+  "webRiskSuspicious": {
+    "message": "可疑"
+  },
+  "webRiskUnsafe": {
+    "message": "危險"
+  },
+  "webRiskMalware": {
+    "message": "惡意程式"
+  },
+  "webRiskPhishing": {
+    "message": "釣魚"
+  },
+  "webRiskSafeDetail": {
+    "message": "目前沒有偵測到已知風險。"
   },
   "originalUrlLabel": {
     "message": "原始網址"

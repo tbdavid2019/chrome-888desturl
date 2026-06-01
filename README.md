@@ -17,6 +17,8 @@ Chrome Extension for checking a URL's final destination through the 888desturl A
   - final URL
   - redirect count
   - link to the hosted result page
+  - final screenshot preview when available
+  - web-risk status when available
 
 ## Requirements
 
@@ -40,6 +42,7 @@ If the extension is already loaded and files changed, click `Reload`.
 4. The side panel opens and starts tracing
 5. Wait for the result
 6. Copy the final URL or open the result page
+7. Review the final screenshot preview and the risk badge when returned by the API
 
 ## UX Behavior
 
@@ -58,12 +61,19 @@ If the extension is already loaded and files changed, click `Reload`.
 
 ## Current Scope
 
-This version focuses on fast final-destination lookup only.
+This version focuses on fast final-destination lookup with lightweight preview and safety metadata.
 
-Not included yet:
+Current result view includes:
+
+- final URL
+- redirect count
+- hosted result page link
+- final screenshot preview
+- web-risk status/message
+
+Still not included:
 
 - full redirect chain view
-- security status display
 - LINE-specific `context=line` mode
 - per-site enable/disable rules
 
@@ -76,6 +86,15 @@ Not included yet:
 
 - Base URL: `https://url.david888.com`
 - Fast endpoint: `https://url.david888.com/api/final?url=<encoded_url>&format=json`
+- Optional result metadata:
+  - `GET /api/results/:resultId/final-image`
+  - `GET /api/results/:resultId/web-risk`
+
+Notes:
+
+- As tested on `2026-06-01`, `/api/final` already returned `result_id`, `preview_url`, and `security` for `https://example.com/`.
+- As tested on `2026-06-01`, direct calls to `/api/results/:resultId/final-image` and `/api/results/:resultId/web-risk` returned `404 Not Found` for that sample result on both `url.create360.ai` and `url.david888.com`.
+- The extension now prefers metadata already included in `/api/final`, and only treats the new result-specific endpoints as optional fallbacks.
 
 ## License
 

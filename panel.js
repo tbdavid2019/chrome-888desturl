@@ -7,8 +7,14 @@ const elements = {
   finalUrl: document.querySelector("#final-url"),
   copyButton: document.querySelector("#copy-button"),
   openButton: document.querySelector("#open-button"),
+  finalImage: document.querySelector("#final-image"),
+  finalImagePlaceholder: document.querySelector("#final-image-placeholder"),
+  openImageButton: document.querySelector("#open-image-button"),
   sourceLabel: document.querySelector("#source-label"),
   redirectCount: document.querySelector("#redirect-count"),
+  webRiskBadge: document.querySelector("#web-risk-badge"),
+  webRiskDetail: document.querySelector("#web-risk-detail"),
+  webRiskMeta: document.querySelector("#web-risk-meta"),
   targetUrl: document.querySelector("#target-url")
 };
 
@@ -57,6 +63,18 @@ async function init() {
       textSpan.textContent = originalText;
     }, 1200);
   });
+
+  elements.finalImage.addEventListener("load", () => {
+    elements.finalImage.hidden = false;
+    elements.finalImagePlaceholder.textContent = "";
+  });
+
+  elements.finalImage.addEventListener("error", () => {
+    elements.finalImage.hidden = true;
+    elements.finalImage.removeAttribute("src");
+    elements.finalImagePlaceholder.textContent =
+      chrome.i18n.getMessage("finalImageLoadFailed");
+  });
 }
 
 function renderState(state = {}) {
@@ -87,6 +105,7 @@ function renderState(state = {}) {
   elements.openButton.href = resultUrl || "#";
   elements.openButton.classList.toggle("disabled-link", !resultUrl);
 
+  renderFinalImage(state);
   elements.sourceLabel.textContent = sourceToLabel(state.source);
   elements.sourceLabel.classList.toggle("muted", !state.source);
 
@@ -101,6 +120,8 @@ function renderState(state = {}) {
   const targetUrl = state.targetUrl || chrome.i18n.getMessage("waitingForInput");
   elements.targetUrl.textContent = targetUrl;
   elements.targetUrl.classList.toggle("muted", !state.targetUrl);
+
+  renderWebRisk(state);
 }
 
 function sourceToLabel(source) {
@@ -114,4 +135,130 @@ function sourceToLabel(source) {
     default:
       return chrome.i18n.getMessage("notTriggered");
   }
+}
+
+function renderFinalImage(state = {}) {
+  const finalImageUrl = state.finalImageUrl || null;
+  const placeholderMessage =
+    state.phase === "loading"
+      ? chrome.i18n.getMessage("finalImageLoading")
+      : chrome.i18n.getMessage("finalImageUnavailable");
+
+  elements.openImageButton.href = finalImageUrl || "#";
+  elements.openImageButton.classList.toggle("disabled-link", !finalImageUrl);
+
+  if (!finalImageUrl) {
+    elements.finalImage.hidden = true;
+    elements.finalImage.removeAttribute("src");
+    delete elements.finalImage.dataset.src;
+    elements.finalImagePlaceholder.textContent = placeholderMessage;
+    return;
+  }
+
+  if (elements.finalImage.dataset.src !== finalImageUrl) {
+    elements.finalImage.dataset.src = finalImageUrl;
+    elements.finalImage.alt = state.finalUrl || state.targetUrl || "";
+    elements.finalImage.hidden = true;
+    elements.finalImagePlaceholder.textContent =
+      chrome.i18n.getMessage("finalImageLoading");
+    elements.finalImage.src = finalImageUrl;
+  }
+}
+
+function renderWebRisk(state = {}) {
+  const webRisk = state.webRisk;
+  const status = typeof webRisk?.status === "string" ? webRisk.status : null;
+  const tone = getRiskTone(status);
+  const badgeText = getRiskBadgeText(status);
+  const metaParts = [];
+  let detailText = webRisk?.message || "";
+
+  if (!detailText) {
+    if (status === "safe") {
+      detailText = chrome.i18n.getMessage("webRiskSafeDetail");
+    } else if (state.phase === "loading") {
+      detailText = chrome.i18n.getMessage("webRiskLoading");
+    } else if (state.phase === "idle" || !state.phase) {
+      detailText = chrome.i18n.getMessage("webRiskWaiting");
+    } else {
+      detailText = chrome.i18n.getMessage("webRiskUnavailable");
+    }
+  }
+
+  if (webRisk?.source) {
+    metaParts.push(webRisk.source);
+  }
+
+  if (webRisk?.checkedAt) {
+    metaParts.push(formatDateTime(webRisk.checkedAt));
+  }
+
+  elements.webRiskBadge.textContent = badgeText;
+  elements.webRiskBadge.className = `risk-badge${tone ? ` ${tone}` : ""}`;
+  elements.webRiskBadge.classList.toggle("muted", !status);
+
+  elements.webRiskDetail.textContent = detailText;
+  elements.webRiskDetail.classList.toggle("muted", !webRisk?.message && !status);
+
+  elements.webRiskMeta.textContent = metaParts.join(" • ");
+  elements.webRiskMeta.classList.toggle("muted", metaParts.length === 0);
+}
+
+function getRiskTone(status) {
+  const normalized = status?.toLowerCase() || "";
+
+  if (!normalized) {
+    return "";
+  }
+
+  if (["safe", "clean", "ok"].includes(normalized)) {
+    return "safe";
+  }
+
+  if (
+    ["unsafe", "malware", "phishing", "danger", "harmful", "blocked"].includes(
+      normalized
+    )
+  ) {
+    return "danger";
+  }
+
+  return "caution";
+}
+
+function getRiskBadgeText(status) {
+  const normalized = status?.toLowerCase() || "";
+
+  switch (normalized) {
+    case "safe":
+    case "clean":
+    case "ok":
+      return chrome.i18n.getMessage("webRiskSafe");
+    case "unsafe":
+    case "danger":
+    case "harmful":
+    case "blocked":
+      return chrome.i18n.getMessage("webRiskUnsafe");
+    case "malware":
+      return chrome.i18n.getMessage("webRiskMalware");
+    case "phishing":
+      return chrome.i18n.getMessage("webRiskPhishing");
+    case "suspicious":
+      return chrome.i18n.getMessage("webRiskSuspicious");
+    default:
+      return chrome.i18n.getMessage("webRiskUnknown");
+  }
+}
+
+function formatDateTime(value) {
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return new Intl.DateTimeFormat(undefined, {
+    dateStyle: "medium",
+    timeStyle: "short"
+  }).format(date);
 }

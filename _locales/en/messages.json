@@ -59,11 +59,59 @@
   "openButtonText": {
     "message": "Open Results"
   },
+  "finalImageLabel": {
+    "message": "Final Screenshot"
+  },
+  "openImageButtonText": {
+    "message": "Open Image"
+  },
+  "finalImageUnavailable": {
+    "message": "No preview is currently available"
+  },
+  "finalImageLoading": {
+    "message": "Loading the final screenshot preview..."
+  },
+  "finalImageLoadFailed": {
+    "message": "Failed to load the final screenshot preview."
+  },
   "sourceLabel": {
     "message": "Source"
   },
   "redirectCountLabel": {
     "message": "Redirects"
+  },
+  "webRiskLabel": {
+    "message": "Web Risk"
+  },
+  "webRiskWaiting": {
+    "message": "Website safety results will appear after the trace completes."
+  },
+  "webRiskLoading": {
+    "message": "Checking website safety status..."
+  },
+  "webRiskUnavailable": {
+    "message": "No website risk data was available for this result."
+  },
+  "webRiskUnknown": {
+    "message": "Not checked"
+  },
+  "webRiskSafe": {
+    "message": "Safe"
+  },
+  "webRiskSuspicious": {
+    "message": "Suspicious"
+  },
+  "webRiskUnsafe": {
+    "message": "Unsafe"
+  },
+  "webRiskMalware": {
+    "message": "Malware"
+  },
+  "webRiskPhishing": {
+    "message": "Phishing"
+  },
+  "webRiskSafeDetail": {
+    "message": "No known risk was detected."
   },
   "originalUrlLabel": {
     "message": "Original URL"

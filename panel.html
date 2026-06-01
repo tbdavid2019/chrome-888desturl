@@ -68,6 +68,17 @@
         </div>
       </section>
 
+      <section class="card preview-card">
+        <div class="section-header">
+          <p class="section-label" data-i18n="finalImageLabel">最終畫面</p>
+          <a id="open-image-button" class="inline-link disabled-link" href="#" target="_blank" rel="noreferrer" data-i18n="openImageButtonText">開啟圖片</a>
+        </div>
+        <div class="preview-frame">
+          <img id="final-image" class="preview-image" alt="" hidden>
+          <p id="final-image-placeholder" class="preview-placeholder" data-i18n="finalImageUnavailable">目前沒有可用預覽</p>
+        </div>
+      </section>
+
       <section class="grid">
         <article class="card mini-card">
           <p class="section-label" data-i18n="sourceLabel">來源</p>
@@ -77,6 +88,15 @@
           <p class="section-label" data-i18n="redirectCountLabel">跳轉次數</p>
           <p id="redirect-count" class="mini-value muted">-</p>
         </article>
+      </section>
+
+      <section class="card risk-card">
+        <div class="section-header risk-header">
+          <p class="section-label" data-i18n="webRiskLabel">網站風險</p>
+          <p id="web-risk-badge" class="risk-badge muted" data-i18n="webRiskUnknown">尚未檢查</p>
+        </div>
+        <p id="web-risk-detail" class="risk-detail muted" data-i18n="webRiskWaiting">等待結果後顯示網站安全檢查。</p>
+        <p id="web-risk-meta" class="risk-meta muted"></p>
       </section>
 
       <section class="card target-card">
